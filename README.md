@@ -1,4 +1,6 @@
-# ethersolve
+# EtherSolve
+
+Front end app for EtherSolve
 
 ## Project setup
 ```
