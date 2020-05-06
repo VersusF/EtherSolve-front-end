@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <h1>Welcome to EtherSolve</h1>
+    <p>This is a paragraph for the content</p>
   </div>
 </template>
 
@@ -13,8 +14,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .content{
-  height: 100%;
-  width: 70%;
   background-color: #0983a8;
 }
 </style>
