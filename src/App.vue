@@ -20,11 +20,11 @@ export default {
 
 <style>
 #app {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
   width: 100vw;
+}
+
+body {
+  margin: 0;
 }
 
 :root {
@@ -38,15 +38,7 @@ export default {
   --sidebar-width: 10rem;
   --transition-speed: .5s;
 }
-body::-webkit-scrollbar {
-  width: 0.25rem;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--bg-accent);
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--text-accent);
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 </style>

@@ -16,6 +16,15 @@
         <i><font-awesome-icon icon="file-import"/></i>
         Import
       </li>
+      <hr>
+
+
+      <li class="sidebar-item sidebar-toggle" style="display: none">
+        <label>
+          <input type="checkbox" id="sidebar-checkbox" v-model="expanded">
+          <font-awesome-icon icon="angle-right" v-on:click="toggle"/>
+        </label>
+      </li>
     </ul>
   </nav>
 </template>
@@ -23,6 +32,16 @@
 <script>
 export default {
   name: 'Sidebar',
+  data () {
+    return {
+      expanded: true
+    }
+  },
+  methods: {
+    toggle: function (){
+      console.log("Toggle");
+    }
+  }
 }
 </script>
 
@@ -31,12 +50,14 @@ export default {
 .sidebar{
   width: var(--sidebar-width);
   height: 100vh;
-  position: fixed;
   background-color: var(--bg-accent);
   color: var(--text-accent);
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+  position: sticky;
+  top: 0;
+  float: left;
+  z-index: 1;
 }
 .sidebar-nav {
   list-style: none;
@@ -57,6 +78,9 @@ export default {
   transition: var(--transition-speed);
   cursor: pointer;
 }
+.sidebar-item:last-child {
+  margin-top: auto;
+}
 .sidebar-item:hover {
   filter: grayscale(0%) opacity(1);
   background-color: var(--bg-accent-hover);
@@ -74,5 +98,20 @@ export default {
 }
 .sidebar-item i {
   padding: .5em;
+}
+.sidebar-toggle {
+  align-self: center;
+  font-size: 4em;
+  margin-bottom: .2em;
+}
+.sidebar-toggle:hover {
+  background-color: var(--bg-accent);
+  font-size: 4.5em;
+}
+#sidebar-checkbox {
+  display: none;
+}
+#sidebar-checkbox:checked + .sidebar {
+  background-color: red;
 }
 </style>

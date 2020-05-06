@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTachometerAlt, faPlus, faFileImport } from '@fortawesome/free-solid-svg-icons'
+import { faTachometerAlt, faPlus, faFileImport, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faTachometerAlt, faPlus, faFileImport)
+library.add(faTachometerAlt, faPlus, faFileImport, faAngleRight)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
