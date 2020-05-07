@@ -7,14 +7,14 @@
     <div class="inputs card">
       <h3>Provide an address</h3>
       <span class="row-input">
-        <input type="text" v-model="address" placeholder="0x..."/>
+        <input type="text"  v-on:click="clearError" v-on:keydown.enter="submit" v-model="address" placeholder="0x..."/>
         <i class="trash" v-on:click="clear_address">
           <font-awesome-icon icon="trash" />
         </i>
       </span>
       <h3>Or provide the bytecode</h3>
       <span class="row-input">
-        <textarea v-model="bytecode" placeholder="6080..." rows="10"/>
+        <textarea  v-on:click="clearError" v-on:keydown.enter="submit" v-model="bytecode" placeholder="6080..." rows="10"/>
         <i class="trash" v-on:click="clear_bytecode">
           <font-awesome-icon icon="trash" />
         </i>
@@ -63,9 +63,9 @@ export default {
       this.errorMessage = '';
       if (this.areValidInputs()){
         if (this.address == '')
-          sendBytcodeRequest(this.bytecode, this.bytecodeType);
+          this.$parent.showAnalysisFromBytecode(this.bytecode, this.bytecodeType);
         else
-          sendAddressRequest(this.address);
+          console.log(this.address);
       }
     },
     clear_address: function () {
@@ -85,18 +85,12 @@ export default {
       else if (! bytecodeOk)
         this.errorMessage = "Invalid bytecode";
       return addressOk && bytecodeOk && ! isEmpty;
+    },
+    clearError: function () {
+      this.errorMessage = '';
     }
   }
 };
-
-function sendBytcodeRequest(bytecode, bytecodeType){
-  console.log(bytecode, bytecodeType);
-}
-
-function sendAddressRequest(address){
-  console.log(address);
-}
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
