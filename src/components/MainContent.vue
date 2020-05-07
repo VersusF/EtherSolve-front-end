@@ -18,13 +18,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .main {
-  width: 100%;
+  width: calc(100% - var(--sidebar-width));
   background-color: var(--bg-main);
   color: var(--text-main);
-  position: relative;
-  float: left;
-
-  height: 3000px;
-  background-color: lawngreen;
+  margin-left: var(--sidebar-width);
 }
 </style>

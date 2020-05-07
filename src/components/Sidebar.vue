@@ -54,7 +54,7 @@ export default {
   color: var(--text-accent);
   display: flex;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   top: 0;
   float: left;
   z-index: 1;

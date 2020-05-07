@@ -25,6 +25,7 @@ export default {
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 :root {
@@ -32,7 +33,7 @@ body {
   font-family: 'Open Sans';
   --text-accent: #f0f0f0;
   --text-main: black;
-  --bg-main: #f0f0f0;
+  --bg-main: #e0e0e0;
   --bg-accent: #222222;
   --bg-accent-hover: #101010;
   --sidebar-width: 10rem;
