@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="top">
-      <img src="@/assets/logo-medium.png" alt="logo" />
+      <!-- <img src="@/assets/logo-medium.png" alt="logo" width="200px"> -->
       <h1>Welcome to EtherSolve</h1>
     </div>
     <div class="inputs card">
@@ -19,30 +19,28 @@
           <font-awesome-icon icon="trash" />
         </i>
       </span>
-      <span class="row-input-grid">
-        <span>
-          <h5>What type of bytecode is it?</h5>
-          <ul>
-            <li>
-              <label for="creation">
-                <input type="radio" v-model="bytecodeType" name="bytecode-type" id="creation" value="creation" />
-                Creation code
-              </label>
-            </li>
-            <li>
-              <label for="runtime">
-                <input type="radio" v-model="bytecodeType" name="bytecode-type" id="runtime" value="runtime" />
-                Runtime code
-              </label>
-            </li>
-          </ul>
-        </span>
-        <p v-if="errorMessage != ''" v-on:click="errorMessage = ''" class="error-message card">
-          <font-awesome-icon icon="exclamation-circle" />
-          {{errorMessage}}
-        </p>
-      </span>
-      <button class="submit card" v-on:click="submit">EtherSolve it!</button>
+      <h3>What type of bytecode is it?</h3>
+      <ul>
+        <li>
+          <label class="radio-elem" for="creation">
+            <input type="radio" v-model="bytecodeType" name="bytecode-type" id="creation" value="creation" />
+            <span class="design"></span>
+            Creation code
+          </label>
+        </li>
+        <li>
+          <label class="radio-elem" for="runtime">
+            <input type="radio" v-model="bytecodeType" name="bytecode-type" id="runtime" value="runtime" />
+            <span class="design"></span>
+            Runtime code
+          </label>
+        </li>
+      </ul>
+      <p v-bind:class="{hidden : ! isError}" v-on:click="clearError" class="error-message card">
+        <font-awesome-icon icon="exclamation-circle" />
+        {{errorMessage}}
+      </p>
+      <button class="submit card" v-on:click="submit">SOLVE</button>
     </div>
   </div>
 </template>
@@ -55,12 +53,14 @@ export default {
       address: "",
       bytecode: '',
       bytecodeType: 'creation',
-      errorMessage: ''
+      errorMessage: '',
+      isError: false
     }
   },
   methods: {
     submit: function() {
       this.errorMessage = '';
+      this.isError = false;
       if (this.areValidInputs()){
         if (this.address == '')
           this.$parent.showAnalysisFromBytecode(this.bytecode, this.bytecodeType);
@@ -78,22 +78,28 @@ export default {
       var addressOk =  this.address.match(/^(0x[a-fA-F0-9]{40}){0,1}$/g)
       var bytecodeOk = this.bytecode.match(/^[a-fA-F0-9]*$/g)
       var isEmpty = this.address == this.bytecode && this.address == '';
-      if (isEmpty)
+      if (isEmpty){
         this.errorMessage = "Empty inputs";
-      else if (! addressOk)
+        this.isError = true;
+      }
+      else if (! addressOk) {
         this.errorMessage = "Invalid address";
-      else if (! bytecodeOk)
+        this.isError = true;
+      }
+      else if (! bytecodeOk) {
         this.errorMessage = "Invalid bytecode";
+        this.isError = true;
+      }
       return addressOk && bytecodeOk && ! isEmpty;
     },
     clearError: function () {
-      this.errorMessage = '';
+      this.isError = false;
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add "scoped" attribute to limit CSS to this component only --> 
 <style scoped>
 .content {
   display: flex;
@@ -104,7 +110,10 @@ export default {
 .top {
   align-self: center;
   text-align: center;
-  margin: 2rem;
+  margin: 1rem;
+}
+.top h1 {
+  font-size: 30pt;
 }
 .inputs {
   margin: 1rem;
@@ -112,23 +121,35 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: left;
+  background: linear-gradient(153deg, rgb(255, 72, 0) 0%, rgb(255, 145, 0) 100%);
+  color: #fff;
+  border-radius: 12px;
+  position: relative;
 }
 .inputs input[type="text"] {
   width: 50vw;
   max-width: 50rem;
+  background-color: var(--text-accent);
+  border: none;
+  border-radius: 12px;
+  padding: 1em;
 }
 .inputs textarea {
   width: 50vw;
   max-width: 50rem;
   resize: none;
   font-family: "Monaco", monospace, sans-serif;
+  background-color: var(--text-accent);
+  border: none;
+  border-radius: 12px;
+  padding: 1em;
 }
 .row-input {
   display: flex;
   align-content: center;
 }
 .trash {
-  color: #444444;
+  color: #bbb;
   padding: 2px;
   cursor: pointer;
 }
@@ -136,37 +157,92 @@ export default {
   display: grid;
   grid-template-columns: 50% 50%;
 }
-.inputs h5 {
+.inputs h3 {
   margin-top: 1em;
   margin-bottom: 0.5em;
 }
 .inputs ul {
   list-style: none;
-  padding-left: 1em;
-  margin-top: 0;
-  margin-bottom: 0.5em;
+  margin: 0;
+  padding: 0;
 }
 .submit {
   text-align: center;
   align-self: center;
   font-size: 20px;
-  padding: 1em 1em;
+  font-weight: 900;
+  padding: .8em 2em;
   border: none;
-  background: #ebbd40;
+  font-weight: 900;
   text-decoration: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
 }
-button.submit:hover {
-  background-color: #ff8828;
-}
 .error-message {
-  background-color: #ff2b2b;
+  color: #ff2b2b;
+  background-color: var(--text-accent);
   border-radius: 12px;
-  color: var(--text-accent);
   padding: 1rem;
-  margin: auto;
   cursor: pointer;
+  transition: ease-in-out .3s;
+
+  position: absolute;
+  bottom: 15%;
+  left: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.hidden {
+  opacity: 0;
+}
+.inputs input[type="radio"] {
+  opacity: 0;
+  margin: 0;
+}
+.radio-elem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  margin: 12px 0;
+
+  cursor: pointer;
+  position: relative;
+}
+.design {
+  width: 16px;
+  height: 16px;
+
+  border: 1px solid var(--text-accent);
+  border-radius: 100%;
+  margin-right: 2%;
+
+  position: relative;
+}
+.design::before,
+.design::after {
+  content: "";
+  display: block;
+
+  width: inherit;
+  height: inherit;
+
+  border-radius: inherit;
+
+  position: absolute;
+  transform: scale(0);
+  transform-origin: center center;
+}
+
+.design:before {
+  background: var(--text-accent);
+  opacity: 0;
+  transition: .3s;
+}
+input:checked+.design::before {
+  opacity: 1;
+  transform: scale(.6);
 }
 </style>

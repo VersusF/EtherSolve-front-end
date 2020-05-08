@@ -1,6 +1,6 @@
 <template>
   <nav class="sidebar">
-    <img class="logo" src="@/assets/logo-mini.png" alt="Logo">
+    <img class="logo" src="@/assets/logo-mini.png" alt="Logo" width="80px">
     <h2 class="logo-text">EtherSolve</h2>
     <ul class="sidebar-nav">
       <li class="sidebar-item">
@@ -77,6 +77,7 @@ export default {
   filter: grayscale(100%) opacity(0.7);
   transition: var(--transition-speed);
   cursor: pointer;
+  padding-left: .5rem;
 }
 .sidebar-item:last-child {
   margin-top: auto;
@@ -91,6 +92,7 @@ export default {
 }
 .logo-text {
   align-self: center;
+  margin: 0 0 1.5rem 0;
 }
 .sidebar-nav hr {
   width: 90%;

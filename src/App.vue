@@ -19,6 +19,8 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
 #app {
   width: 100vw;
 }
@@ -30,13 +32,14 @@ body {
 
 :root {
   font-size: 16px;
-  font-family: 'Open Sans';
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 500;
   --text-accent: #f0f0f0;
   --text-main: black;
   --bg-main: #e0e0e0;
   --bg-accent: #222222;
   --bg-accent-hover: #101010;
-  --sidebar-width: 10rem;
+  --sidebar-width: 12rem;
   --transition-speed: .5s;
 }
 .card {
