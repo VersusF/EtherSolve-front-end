@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Sidebar/>
-    <MainContent/>
+    <Sidebar :analysis="analysis"/>
+    <MainContent ref="Main"/>
   </div>
 </template>
 
@@ -13,7 +13,47 @@ export default {
   name: 'App',
   components: {
     Sidebar,
-    MainContent
+    MainContent,
+  },
+  data () {
+    return {
+      analysis: [],
+      reports: {},
+      currentAnalysisName: null
+    }
+  },
+  methods: {
+    newAnalysis() {
+      this.$refs.Main.newAnalysis();
+    },
+    addAnalysis(name, request) {
+      this.currentAnalysisName = name;
+      this.analysis.push(name);
+      console.log(this.reports);
+      this.reports[name] = {
+        name: name,
+        request: request,
+        description: 'Cacca in brodo'
+      }
+      this.showAnalysis(name);
+    },
+    closeAnalysis(name) {
+      var index = this.analysis.indexOf(name);
+      this.analysis.splice(index, 1);
+      if (this.analysis.length == 0)
+        this.newAnalysis();
+      else if (this.currentAnalysisName == name){
+        this.currentAnalysisName = this.analysis[0];
+        this.showAnalysis(this.currentAnalysisName);
+      }
+    },
+    showAnalysis(name){
+      var currentAnalysisReport = this.reports[name];
+      this.$refs.Main.showAnalysis(currentAnalysisReport);
+    },
+    showCurrentAnalysis(){
+      this.showAnalysis(this.currentAnalysisName);
+    }
   }
 }
 </script>
@@ -40,6 +80,7 @@ body {
   --bg-accent: #222222;
   --bg-accent-hover: #101010;
   --sidebar-width: 12rem;
+  --sidebar-position: 0;
   --transition-speed: .5s;
 }
 .card {

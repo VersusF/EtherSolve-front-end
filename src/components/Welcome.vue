@@ -65,7 +65,7 @@ export default {
         if (this.address == '')
           this.$parent.showAnalysisFromBytecode(this.bytecode, this.bytecodeType);
         else
-          console.log(this.address);
+          this.$parent.showAnalysisFromAddress(this.address);
       }
     },
     clear_address: function () {

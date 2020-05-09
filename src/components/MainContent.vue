@@ -1,7 +1,11 @@
 <template>
   <main class="main">
-    <Welcome />
-    <Analysis />
+    <div v-if="! isAnalysisShown">
+      <Welcome />
+    </div>
+    <div v-else>
+      <Analysis v-bind:currentAnalysisReport="currentAnalysisReport"/>
+    </div>    
   </main>
 </template>
 
@@ -15,12 +19,31 @@ export default {
     Welcome,
     Analysis
   },
+  data: () => {
+    return {
+      isAnalysisShown: false,
+      currentAnalysisName: null,
+      currentAnalysisReport: {}
+    }
+  },
   methods: {
     showAnalysisFromAddress(address) {
-      console.log(address);
+      var request = address;
+      var name = address.substring(0,10);
+      this.$parent.addAnalysis(name, request);
     },
     showAnalysisFromBytecode(bytecode, bytecodeType) {
-      console.log(bytecode, bytecodeType);
+      var request = bytecode + ': ' + bytecodeType;
+      var name = bytecode.substring(0,10)
+      this.$parent.addAnalysis(name, request);
+    },
+    showAnalysis(report){
+      this.isAnalysisShown = true;
+      this.currentAnalysisName = report.name;
+      this.currentAnalysisReport = report;
+    },
+    newAnalysis() {
+      this.isAnalysisShown = false;
     }
   }
 };
@@ -33,6 +56,9 @@ export default {
   background-color: var(--bg-main);
   min-height: 100vh;
   color: var(--text-main);
-  margin-left: var(--sidebar-width);
+
+  position: absolute;
+  left: var(--sidebar-width);
+  top: 0;
 }
 </style>

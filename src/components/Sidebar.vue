@@ -3,28 +3,32 @@
     <img class="logo" src="@/assets/logo-mini.png" alt="Logo" width="80px">
     <h2 class="logo-text">EtherSolve</h2>
     <ul class="sidebar-nav">
-      <li class="sidebar-item">
+      <li class="sidebar-item" v-on:click="showCurrentAnalysis">
         <i><font-awesome-icon icon="tachometer-alt"/></i>
-        Dashboard
+        <p>Dashboard</p>
       </li>
       <hr>
-      <li class="sidebar-item">
+      <li class="sidebar-item" v-on:click="newAnalysis">
         <i><font-awesome-icon icon="plus"/></i>
-        New analysis
+        <p>New analysis</p>
       </li>
       <li class="sidebar-item">
         <i><font-awesome-icon icon="file-import"/></i>
-        Import
+        <p>Import</p>
       </li>
       <hr>
 
+      <!-- Active analysis list -->
+      <template v-for="name in analysis" v-bind="analysis">
+        <li class="sidebar-item" v-bind:key="name">
+          <span  class="analysisName" v-on:click="showAnalysis(name)">
+            <i><font-awesome-icon icon="file-alt"/></i>
+            <p>{{name}}...</p>
+          </span>
+          <i class="close-button" v-on:click="closeAnalysis(name)"><font-awesome-icon icon="times"/></i>
+        </li>
+      </template>
 
-      <li class="sidebar-item sidebar-toggle" style="display: none">
-        <label>
-          <input type="checkbox" id="sidebar-checkbox" v-model="expanded">
-          <font-awesome-icon icon="angle-right" v-on:click="toggle"/>
-        </label>
-      </li>
     </ul>
   </nav>
 </template>
@@ -37,9 +41,21 @@ export default {
       expanded: true
     }
   },
+  props: {
+    analysis: Array
+  },
   methods: {
-    toggle: function (){
-      console.log("Toggle");
+    newAnalysis() {
+      this.$parent.newAnalysis();
+    },
+    showCurrentAnalysis() {
+      this.$parent.showCurrentAnalysis();
+    },
+    closeAnalysis(name){
+      this.$parent.closeAnalysis(name);
+    },
+    showAnalysis(name){
+      this.$parent.showAnalysis(name);
     }
   }
 }
@@ -56,6 +72,7 @@ export default {
   flex-direction: column;
   position: fixed;
   top: 0;
+  left: var(--sidebar-position);
   float: left;
   z-index: 1;
 }
@@ -79,9 +96,6 @@ export default {
   cursor: pointer;
   padding-left: .5rem;
 }
-.sidebar-item:last-child {
-  margin-top: auto;
-}
 .sidebar-item:hover {
   filter: grayscale(0%) opacity(1);
   background-color: var(--bg-accent-hover);
@@ -100,6 +114,15 @@ export default {
 }
 .sidebar-item i {
   padding: .5em;
+}
+.analysisName {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.close-button {
+  margin-left: auto;
+  margin-right: 8%;
 }
 .sidebar-toggle {
   align-self: center;
