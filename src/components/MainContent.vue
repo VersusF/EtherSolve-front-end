@@ -1,11 +1,11 @@
 <template>
-  <main class="main">
+  <main class="main" v-on:click="closeSidebar">
     <div v-if="! isAnalysisShown">
       <Welcome />
     </div>
     <div v-else>
-      <Analysis v-bind:currentAnalysisReport="currentAnalysisReport"/>
-    </div>    
+      <Analysis v-bind:currentAnalysisReport="currentAnalysisReport" />
+    </div>
   </main>
 </template>
 
@@ -19,31 +19,37 @@ export default {
     Welcome,
     Analysis
   },
+  props: {
+    isSidebarExpanded: Boolean
+  },
   data: () => {
     return {
       isAnalysisShown: false,
       currentAnalysisName: null,
       currentAnalysisReport: {}
-    }
+    };
   },
   methods: {
     showAnalysisFromAddress(address) {
       var request = address;
-      var name = address.substring(0,10);
+      var name = address.substring(0, 10);
       this.$parent.addAnalysis(name, request);
     },
     showAnalysisFromBytecode(bytecode, bytecodeType) {
-      var request = bytecode + ': ' + bytecodeType;
-      var name = bytecode.substring(0,10)
+      var request = bytecode + ": " + bytecodeType;
+      var name = bytecode.substring(0, 10);
       this.$parent.addAnalysis(name, request);
     },
-    showAnalysis(report){
+    showAnalysis(report) {
       this.isAnalysisShown = true;
       this.currentAnalysisName = report.name;
       this.currentAnalysisReport = report;
     },
     newAnalysis() {
       this.isAnalysisShown = false;
+    },
+    closeSidebar() {
+      if (this.isSidebarExpanded) this.$parent.toggleSidebar();
     }
   }
 };
@@ -52,13 +58,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .main {
-  width: calc(100% - var(--sidebar-width));
+  /* width: calc(100% - var(--sidebar-width)); */
+  width: 100%;
   background-color: var(--bg-main);
   min-height: 100vh;
   color: var(--text-main);
 
   position: absolute;
-  left: var(--sidebar-width);
+  /* left: var(--sidebar-width); */
   top: 0;
+}
+
+@media (min-width: 950px) {
+  .main {
+    width: calc(100% - var(--sidebar-width));
+    left: var(--sidebar-width);
+  }
 }
 </style>

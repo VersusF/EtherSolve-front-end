@@ -1,22 +1,26 @@
 <template>
   <div id="app">
-    <Sidebar :analysis="analysis"/>
-    <MainContent ref="Main"/>
+    <Sidebar :analysis="analysis" :isExpanded="isSidebarExpanded" ref="Sidebar"/>
+    <BurgerButton/>
+    <MainContent :isSidebarExpanded="isSidebarExpanded" ref="Main"/>
   </div>
 </template>
 
 <script>
 import MainContent from './components/MainContent.vue'
 import Sidebar from './components/Sidebar.vue'
+import BurgerButton from './components/BurgerButton.vue'
 
 export default {
   name: 'App',
   components: {
     Sidebar,
     MainContent,
+    BurgerButton
   },
   data () {
     return {
+      isSidebarExpanded: false,
       analysis: [],
       reports: {},
       currentAnalysisName: null
@@ -40,8 +44,10 @@ export default {
     closeAnalysis(name) {
       var index = this.analysis.indexOf(name);
       this.analysis.splice(index, 1);
-      if (this.analysis.length == 0)
+      if (this.analysis.length == 0){
+        this.currentAnalysisName = null;
         this.newAnalysis();
+      }
       else if (this.currentAnalysisName == name){
         this.currentAnalysisName = this.analysis[0];
         this.showAnalysis(this.currentAnalysisName);
@@ -52,7 +58,11 @@ export default {
       this.$refs.Main.showAnalysis(currentAnalysisReport);
     },
     showCurrentAnalysis(){
-      this.showAnalysis(this.currentAnalysisName);
+      if (this.currentAnalysisName != null)
+        this.showAnalysis(this.currentAnalysisName);
+    },
+    toggleSidebar(){
+      this.isSidebarExpanded = ! this.isSidebarExpanded;
     }
   }
 }

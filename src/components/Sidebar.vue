@@ -1,48 +1,57 @@
 <template>
-  <nav class="sidebar">
-    <img class="logo" src="@/assets/logo-mini.png" alt="Logo" width="80px">
+  <nav
+    class="sidebar"
+    v-bind:class="{expanded: isExpanded, hidden : ! isExpanded}"
+    v-on:click="toggleSidebar"
+  >
+    <img class="logo" src="@/assets/logo-mini.png" alt="Logo" width="80px" />
     <h2 class="logo-text">EtherSolve</h2>
     <ul class="sidebar-nav">
       <li class="sidebar-item" v-on:click="showCurrentAnalysis">
-        <i><font-awesome-icon icon="tachometer-alt"/></i>
+        <i>
+          <font-awesome-icon icon="tachometer-alt" />
+        </i>
         <p>Dashboard</p>
       </li>
-      <hr>
+      <hr />
       <li class="sidebar-item" v-on:click="newAnalysis">
-        <i><font-awesome-icon icon="plus"/></i>
+        <i>
+          <font-awesome-icon icon="plus" />
+        </i>
         <p>New analysis</p>
       </li>
       <li class="sidebar-item">
-        <i><font-awesome-icon icon="file-import"/></i>
+        <i>
+          <font-awesome-icon icon="file-import" />
+        </i>
         <p>Import</p>
       </li>
-      <hr>
+      <hr />
 
       <!-- Active analysis list -->
       <template v-for="name in analysis" v-bind="analysis">
         <li class="sidebar-item" v-bind:key="name">
-          <span  class="analysisName" v-on:click="showAnalysis(name)">
-            <i><font-awesome-icon icon="file-alt"/></i>
+          <span class="analysisName" v-on:click="showAnalysis(name)">
+            <i>
+              <font-awesome-icon icon="file-alt" />
+            </i>
             <p>{{name}}...</p>
           </span>
-          <i class="close-button" v-on:click="closeAnalysis(name)"><font-awesome-icon icon="times"/></i>
+          <i class="close-button" v-on:click="closeAnalysis(name)">
+            <font-awesome-icon icon="times" />
+          </i>
         </li>
       </template>
-
     </ul>
   </nav>
 </template>
 
 <script>
 export default {
-  name: 'Sidebar',
-  data () {
-    return {
-      expanded: true
-    }
-  },
+  name: "Sidebar",
   props: {
-    analysis: Array
+    analysis: Array,
+    isExpanded: Boolean
   },
   methods: {
     newAnalysis() {
@@ -51,19 +60,22 @@ export default {
     showCurrentAnalysis() {
       this.$parent.showCurrentAnalysis();
     },
-    closeAnalysis(name){
+    closeAnalysis(name) {
       this.$parent.closeAnalysis(name);
     },
-    showAnalysis(name){
+    showAnalysis(name) {
       this.$parent.showAnalysis(name);
+    },
+    toggleSidebar() {
+      this.$parent.toggleSidebar();
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.sidebar{
+.sidebar {
   width: var(--sidebar-width);
   height: 100vh;
   background-color: var(--bg-accent);
@@ -72,9 +84,17 @@ export default {
   flex-direction: column;
   position: fixed;
   top: 0;
-  left: var(--sidebar-position);
-  float: left;
   z-index: 1;
+  transition: all var(--transition-speed) ease-in-out;
+  -webkit-transition: all var(--transition-speed)  ease-in-out;
+  -moz-transition: all var(--transition-speed)  ease-in-out;
+  -o-transition: all var(--transition-speed)  ease-in-out;
+}
+.expanded {
+  left: 0;
+}
+.hidden {
+  left: calc(-1 * var(--sidebar-width));
 }
 .sidebar-nav {
   list-style: none;
@@ -94,14 +114,14 @@ export default {
   filter: grayscale(100%) opacity(0.7);
   transition: var(--transition-speed);
   cursor: pointer;
-  padding-left: .5rem;
+  padding-left: 0.5rem;
 }
 .sidebar-item:hover {
   filter: grayscale(0%) opacity(1);
   background-color: var(--bg-accent-hover);
 }
 .logo {
-  padding: .5em;
+  padding: 0.5em;
   align-self: center;
 }
 .logo-text {
@@ -110,10 +130,10 @@ export default {
 }
 .sidebar-nav hr {
   width: 90%;
-  filter: opacity(.7);
+  filter: opacity(0.7);
 }
 .sidebar-item i {
-  padding: .5em;
+  padding: 0.5em;
 }
 .analysisName {
   display: flex;
@@ -127,7 +147,7 @@ export default {
 .sidebar-toggle {
   align-self: center;
   font-size: 4em;
-  margin-bottom: .2em;
+  margin-bottom: 0.2em;
 }
 .sidebar-toggle:hover {
   background-color: var(--bg-accent);
@@ -138,5 +158,11 @@ export default {
 }
 #sidebar-checkbox:checked + .sidebar {
   background-color: red;
+}
+
+@media (min-width: 950px) {
+  .hidden {
+    left: 0;
+  }
 }
 </style>

@@ -116,18 +116,19 @@ export default {
   font-size: 30pt;
 }
 .inputs {
+  width: 70vw;
+  max-width: 52rem;
   margin: 1rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: left;
   background: linear-gradient(153deg, rgb(255, 72, 0) 0%, rgb(255, 145, 0) 100%);
   color: #fff;
   border-radius: 12px;
   position: relative;
 }
 .inputs input[type="text"] {
-  width: 50vw;
+  width: 100%;
   max-width: 50rem;
   background-color: var(--text-accent);
   border: none;
@@ -135,7 +136,7 @@ export default {
   padding: 1em;
 }
 .inputs textarea {
-  width: 50vw;
+  width: 100%;
   max-width: 50rem;
   resize: none;
   font-family: "Monaco", monospace, sans-serif;
@@ -152,6 +153,7 @@ export default {
   color: #bbb;
   padding: 2px;
   cursor: pointer;
+  height: 1.5rem;
 }
 .row-input-grid {
   display: grid;
@@ -178,6 +180,7 @@ export default {
   border-radius: 12px;
   cursor: pointer;
   transition: all var(--transition-speed) ease;
+  outline: none;
 }
 .error-message {
   color: #ff2b2b;
@@ -188,8 +191,8 @@ export default {
   transition: ease-in-out .3s;
 
   position: absolute;
-  bottom: 15%;
-  left: 60%;
+  bottom: 13%;
+  left: 55%;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -245,4 +248,12 @@ input:checked+.design::before {
   opacity: 1;
   transform: scale(.6);
 }
+
+@media (min-width: 950px) {
+  .error-message {
+    left: 60%;
+    bottom: 15%;
+  }
+}
+
 </style>
