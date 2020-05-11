@@ -131,26 +131,33 @@ export default {
   width: 100%;
   max-width: 50rem;
   background-color: var(--text-accent);
-  border: none;
+  font-family: "B612 Mono", monospace, sans-serif;
   border-radius: 12px;
   padding: 1em;
+  outline: none;
+  border: none;
 }
 .inputs textarea {
   width: 100%;
   max-width: 50rem;
   resize: none;
-  font-family: "Monaco", monospace, sans-serif;
+  font-family: "B612 Mono", monospace, sans-serif;
   background-color: var(--text-accent);
-  border: none;
   border-radius: 12px;
   padding: 1em;
+  outline: none;
+  border: none;
+}
+.inputs input[type="text"]:focus, textarea:focus{
+  border-bottom: 2px solid #a33c00;
+  border-left: 2px solid #a33c00;
 }
 .row-input {
   display: flex;
   align-content: center;
 }
 .trash {
-  color: #bbb;
+  color: #ccc;
   padding: 2px;
   cursor: pointer;
   height: 1.5rem;

@@ -60,8 +60,8 @@ export default {
 .main {
   /* width: calc(100% - var(--sidebar-width)); */
   width: 100%;
-  background-color: var(--bg-main);
   min-height: 100vh;
+  background-color: var(--bg-main);
   color: var(--text-main);
 
   position: absolute;

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Sidebar :analysis="analysis" :isExpanded="isSidebarExpanded" ref="Sidebar"/>
-    <BurgerButton/>
+    <BurgerButton :isSidebarExpanded="isSidebarExpanded" />
     <MainContent :isSidebarExpanded="isSidebarExpanded" ref="Main"/>
   </div>
 </template>
@@ -70,6 +70,7 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=B612+Mono&display=swap');
 
 #app {
   width: 100vw;
