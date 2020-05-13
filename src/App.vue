@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Sidebar :analysis="analysis" :isExpanded="isSidebarExpanded" ref="Sidebar"/>
+    <Sidebar :analysisList="analysisList" :isExpanded="isSidebarExpanded" ref="Sidebar"/>
     <BurgerButton :isSidebarExpanded="isSidebarExpanded" />
     <MainContent :isSidebarExpanded="isSidebarExpanded" ref="Main"/>
   </div>
@@ -21,51 +21,82 @@ export default {
   data () {
     return {
       isSidebarExpanded: false,
-      analysis: [],
+      analysisList: [],
       reports: {},
-      currentAnalysisName: null
+      currentAnalysisID: null,
+      analysisCount: 0
     }
   },
   methods: {
     newAnalysis() {
       this.$refs.Main.newAnalysis();
     },
-    addAnalysis(name, request) {
-      this.currentAnalysisName = name;
-      this.analysis.push(name);
-      console.log(this.reports);
-      this.reports[name] = {
-        name: name,
+    addAnalysis(request) {
+      this.currentAnalysisID = this.analysisCount;
+      var contractName = 'Contract_' + this.analysisCount;
+      this.analysisList.push({
+        id: this.analysisCount,
+        name: contractName
+      });
+      this.reports[this.analysisCount] = {
+        name: contractName,
         request: request,
         description: 'Cacca in brodo'
       }
-      this.showAnalysis(name);
+      this.analysisCount++;
+      this.showCurrentAnalysis();
     },
-    closeAnalysis(name) {
-      var index = this.analysis.indexOf(name);
-      this.analysis.splice(index, 1);
-      if (this.analysis.length == 0){
-        this.currentAnalysisName = null;
+    closeAnalysis(id) {
+      // Get index of element with that id
+      var index = this.analysisIndexOf(id);
+      // Remove from the array
+      this.analysisList.splice(index, 1);
+      // Update view
+      if (this.analysisList.length == 0){
+        this.currentAnalysisID = null;
         this.newAnalysis();
       }
-      else if (this.currentAnalysisName == name){
-        this.currentAnalysisName = this.analysis[0];
-        this.showAnalysis(this.currentAnalysisName);
+      else if (this.currentAnalysisID == name){
+        this.currentAnalysisID = this.analysisList[0];
+        this.showAnalysis(this.currentAnalysisID);
       }
+      // Delete report
+      delete this.reports[id];
     },
-    showAnalysis(name){
-      var currentAnalysisReport = this.reports[name];
+    showAnalysis(id){
+      var currentAnalysisReport = this.reports[id];
       this.$refs.Main.showAnalysis(currentAnalysisReport);
     },
     showCurrentAnalysis(){
-      if (this.currentAnalysisName != null)
-        this.showAnalysis(this.currentAnalysisName);
+      if (this.currentAnalysisID != null)
+        this.showAnalysis(this.currentAnalysisID);
+    },
+    rename(id, newName){
+      var index = this.analysisIndexOf(id);
+      this.$set(this.analysisList[index], 'name', newName);
+      this.$set(this.reports[id], 'name', newName);
     },
     toggleSidebar(){
       this.isSidebarExpanded = ! this.isSidebarExpanded;
+    },
+    analysisIndexOf(id){
+      for (var i = 0; i < this.analysisList.length; i++)
+        if (this.analysisList[i].id == id){
+          return i;
+      }
+      return null;
     }
   }
 }
+/*
+reports: {
+  <reportName>: {
+    name: <reportName>,
+    request: <request>,
+    description: <description>
+  }
+}
+*/
 </script>
 
 <style>
@@ -90,7 +121,7 @@ body {
   --bg-main: #e0e0e0;
   --bg-accent: #222222;
   --bg-accent-hover: #101010;
-  --sidebar-width: 12rem;
+  --sidebar-width: 15rem;
   --sidebar-position: 0;
   --transition-speed: .5s;
 }

@@ -32,13 +32,11 @@ export default {
   methods: {
     showAnalysisFromAddress(address) {
       var request = address;
-      var name = address.substring(0, 10);
-      this.$parent.addAnalysis(name, request);
+      this.$parent.addAnalysis(request);
     },
     showAnalysisFromBytecode(bytecode, bytecodeType) {
       var request = bytecode + ": " + bytecodeType;
-      var name = bytecode.substring(0, 10);
-      this.$parent.addAnalysis(name, request);
+      this.$parent.addAnalysis(request);
     },
     showAnalysis(report) {
       this.isAnalysisShown = true;

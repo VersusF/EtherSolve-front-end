@@ -2,26 +2,26 @@
   <nav
     class="sidebar"
     v-bind:class="{expanded: isExpanded, hidden : ! isExpanded}"
-    v-on:click="toggleSidebar"
   >
+    <!-- v-on:click="toggleSidebar" -->
     <img class="logo" src="@/assets/logo-mini.png" alt="Logo" width="80px" />
     <h2 class="logo-text">EtherSolve</h2>
     <ul class="sidebar-nav">
       <li class="sidebar-item" v-on:click="showCurrentAnalysis">
-        <i>
+        <i class="list-icon">
           <font-awesome-icon icon="tachometer-alt" />
         </i>
         <p>Dashboard</p>
       </li>
       <hr />
       <li class="sidebar-item" v-on:click="newAnalysis">
-        <i>
+        <i class="list-icon">
           <font-awesome-icon icon="plus" />
         </i>
         <p>New analysis</p>
       </li>
       <li class="sidebar-item">
-        <i>
+        <i class="list-icon">
           <font-awesome-icon icon="file-import" />
         </i>
         <p>Import</p>
@@ -29,28 +29,26 @@
       <hr />
 
       <!-- Active analysis list -->
-      <template v-for="name in analysis" v-bind="analysis">
-        <li class="sidebar-item" v-bind:key="name">
-          <span class="analysisName" v-on:click="showAnalysis(name)">
-            <i>
-              <font-awesome-icon icon="file-alt" />
-            </i>
-            <p>{{name}}...</p>
-          </span>
-          <i class="close-button" v-on:click="closeAnalysis(name)">
-            <font-awesome-icon icon="times" />
-          </i>
-        </li>
-      </template>
+      <AnalysisElement
+        v-for="obj in analysisList"
+        :key="obj.id"
+        :name="obj.name"
+        :id="obj.id"
+        />
     </ul>
   </nav>
 </template>
 
 <script>
+import AnalysisElement from "./sidebar_elements/AnalysisElement.vue"
+
 export default {
   name: "Sidebar",
+  components: {
+    AnalysisElement
+  },
   props: {
-    analysis: Array,
+    analysisList: Array,
     isExpanded: Boolean
   },
   methods: {
@@ -60,14 +58,18 @@ export default {
     showCurrentAnalysis() {
       this.$parent.showCurrentAnalysis();
     },
-    closeAnalysis(name) {
-      this.$parent.closeAnalysis(name);
+    closeAnalysis(id) {
+      this.$parent.closeAnalysis(id);
     },
-    showAnalysis(name) {
-      this.$parent.showAnalysis(name);
+    showAnalysis(id) {
+      this.$parent.showAnalysis(id);
+      this.toggleSidebar();
     },
     toggleSidebar() {
       this.$parent.toggleSidebar();
+    },
+    rename(id, newName) {
+      this.$parent.rename(id, newName);
     }
   }
 };
@@ -78,7 +80,7 @@ export default {
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: var(--bg-accent);
+  background: linear-gradient(155deg, #333 0%, #000 100%);
   color: var(--text-accent);
   display: flex;
   flex-direction: column;
@@ -132,32 +134,8 @@ export default {
   width: 90%;
   filter: opacity(0.7);
 }
-.sidebar-item i {
+.list-icon {
   padding: 0.5em;
-}
-.analysisName {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-.close-button {
-  margin-left: auto;
-  margin-right: 8%;
-}
-.sidebar-toggle {
-  align-self: center;
-  font-size: 4em;
-  margin-bottom: 0.2em;
-}
-.sidebar-toggle:hover {
-  background-color: var(--bg-accent);
-  font-size: 4.5em;
-}
-#sidebar-checkbox {
-  display: none;
-}
-#sidebar-checkbox:checked + .sidebar {
-  background-color: red;
 }
 
 @media (min-width: 950px) {
