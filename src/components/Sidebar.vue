@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import AnalysisElement from "./sidebar_elements/AnalysisElement.vue"
 
 export default {
@@ -49,14 +50,21 @@ export default {
   },
   props: {
     analysisList: Array,
-    isExpanded: Boolean
   },
+  computed: mapState({
+    isExpanded: state => state.isSidebarExpanded
+  }),
   methods: {
+    ...mapActions({
+      toggleSidebar: 'toggleSidebar'
+    }),
     newAnalysis() {
       this.$parent.newAnalysis();
+      this.toggleSidebar();
     },
     showCurrentAnalysis() {
       this.$parent.showCurrentAnalysis();
+      this.toggleSidebar();
     },
     closeAnalysis(id) {
       this.$parent.closeAnalysis(id);
@@ -64,9 +72,6 @@ export default {
     showAnalysis(id) {
       this.$parent.showAnalysis(id);
       this.toggleSidebar();
-    },
-    toggleSidebar() {
-      this.$parent.toggleSidebar();
     },
     rename(id, newName) {
       this.$parent.rename(id, newName);

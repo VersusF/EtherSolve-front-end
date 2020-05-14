@@ -6,15 +6,17 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
     name: "BurgerButton",
-    props: {
-        isSidebarExpanded: Boolean
-    },
+    computed: mapState({
+        isSidebarExpanded: state => state.isSidebarExpanded
+    }),
     methods: {
-        toggleSidebar() {
-            this.$parent.toggleSidebar();
-        }
+        ...mapActions({
+            toggleSidebar: 'toggleSidebar'
+        })
     }
 }
 </script>

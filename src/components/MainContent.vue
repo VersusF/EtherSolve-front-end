@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Welcome from "@/components/Welcome.vue";
 import Analysis from "@/components/Analysis.vue";
 
@@ -19,9 +20,6 @@ export default {
     Welcome,
     Analysis
   },
-  props: {
-    isSidebarExpanded: Boolean
-  },
   data: () => {
     return {
       isAnalysisShown: false,
@@ -30,6 +28,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      closeSidebar: 'closeSidebar'
+    }),
     showAnalysisFromAddress(address) {
       var request = address;
       this.$parent.addAnalysis(request);
@@ -46,9 +47,6 @@ export default {
     newAnalysis() {
       this.isAnalysisShown = false;
     },
-    closeSidebar() {
-      if (this.isSidebarExpanded) this.$parent.toggleSidebar();
-    }
   }
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Sidebar :analysisList="analysisList" :isExpanded="isSidebarExpanded" ref="Sidebar"/>
-    <BurgerButton :isSidebarExpanded="isSidebarExpanded" />
-    <MainContent :isSidebarExpanded="isSidebarExpanded" ref="Main"/>
+    <Sidebar :analysisList="analysisList" ref="Sidebar"/>
+    <BurgerButton />
+    <MainContent ref="Main"/>
   </div>
 </template>
 
@@ -20,7 +20,6 @@ export default {
   },
   data () {
     return {
-      isSidebarExpanded: false,
       analysisList: [],
       reports: {},
       currentAnalysisID: null,
@@ -75,9 +74,6 @@ export default {
       var index = this.analysisIndexOf(id);
       this.$set(this.analysisList[index], 'name', newName);
       this.$set(this.reports[id], 'name', newName);
-    },
-    toggleSidebar(){
-      this.isSidebarExpanded = ! this.isSidebarExpanded;
     },
     analysisIndexOf(id){
       for (var i = 0; i < this.analysisList.length; i++)
