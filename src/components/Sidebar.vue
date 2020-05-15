@@ -30,10 +30,9 @@
 
       <!-- Active analysis list -->
       <AnalysisElement
-        v-for="obj in analysisList"
-        :key="obj.id"
-        :name="obj.name"
-        :id="obj.id"
+        v-for="id in analysisList"
+        :key="id"
+        :id="id"
         />
     </ul>
   </nav>
@@ -48,34 +47,24 @@ export default {
   components: {
     AnalysisElement
   },
-  props: {
-    analysisList: Array,
-  },
   computed: mapState({
-    isExpanded: state => state.isSidebarExpanded
+    isExpanded: state => state.isSidebarExpanded,
+    analysisList: state => state.analysisList,
   }),
   methods: {
     ...mapActions({
-      toggleSidebar: 'toggleSidebar'
+      toggleSidebar: 'toggleSidebar',
+      hideAnalysis: 'hideAnalysis',
+      showAnalysis: 'showAnalysis'
     }),
     newAnalysis() {
-      this.$parent.newAnalysis();
+      this.hideAnalysis();
       this.toggleSidebar();
     },
     showCurrentAnalysis() {
-      this.$parent.showCurrentAnalysis();
+      this.showAnalysis();
       this.toggleSidebar();
     },
-    closeAnalysis(id) {
-      this.$parent.closeAnalysis(id);
-    },
-    showAnalysis(id) {
-      this.$parent.showAnalysis(id);
-      this.toggleSidebar();
-    },
-    rename(id, newName) {
-      this.$parent.rename(id, newName);
-    }
   }
 };
 </script>

@@ -4,13 +4,13 @@
       <Welcome />
     </div>
     <div v-else>
-      <Analysis v-bind:currentAnalysisReport="currentAnalysisReport" />
+      <Analysis />
     </div>
   </main>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Welcome from "@/components/Welcome.vue";
 import Analysis from "@/components/Analysis.vue";
 
@@ -20,32 +20,26 @@ export default {
     Welcome,
     Analysis
   },
-  data: () => {
-    return {
-      isAnalysisShown: false,
-      currentAnalysisName: null,
-      currentAnalysisReport: {}
-    };
+  computed: {
+    ...mapState({
+      isAnalysisShown: 'isAnalysisShown'
+    })
   },
   methods: {
     ...mapActions({
-      closeSidebar: 'closeSidebar'
+      closeSidebar: 'closeSidebar',
+      addAnalysis: 'addAnalysis'
     }),
     showAnalysisFromAddress(address) {
       var request = address;
-      this.$parent.addAnalysis(request);
+      this.addAnalysis(request);
     },
     showAnalysisFromBytecode(bytecode, bytecodeType) {
       var request = bytecode + ": " + bytecodeType;
-      this.$parent.addAnalysis(request);
-    },
-    showAnalysis(report) {
-      this.isAnalysisShown = true;
-      this.currentAnalysisName = report.name;
-      this.currentAnalysisReport = report;
+      this.addAnalysis(request);
     },
     newAnalysis() {
-      this.isAnalysisShown = false;
+      this.hideAnalysis();
     },
   }
 };

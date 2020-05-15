@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Sidebar :analysisList="analysisList" ref="Sidebar"/>
+    <Sidebar/>
     <BurgerButton />
-    <MainContent ref="Main"/>
+    <MainContent/>
   </div>
 </template>
 
@@ -18,81 +18,9 @@ export default {
     MainContent,
     BurgerButton
   },
-  data () {
-    return {
-      analysisList: [],
-      reports: {},
-      currentAnalysisID: null,
-      analysisCount: 0
-    }
-  },
   methods: {
-    newAnalysis() {
-      this.$refs.Main.newAnalysis();
-    },
-    addAnalysis(request) {
-      this.currentAnalysisID = this.analysisCount;
-      var contractName = 'Contract_' + this.analysisCount;
-      this.analysisList.push({
-        id: this.analysisCount,
-        name: contractName
-      });
-      this.reports[this.analysisCount] = {
-        name: contractName,
-        request: request,
-        description: 'Cacca in brodo'
-      }
-      this.analysisCount++;
-      this.showCurrentAnalysis();
-    },
-    closeAnalysis(id) {
-      // Get index of element with that id
-      var index = this.analysisIndexOf(id);
-      // Remove from the array
-      this.analysisList.splice(index, 1);
-      // Update view
-      if (this.analysisList.length == 0){
-        this.currentAnalysisID = null;
-        this.newAnalysis();
-      }
-      else if (this.currentAnalysisID == name){
-        this.currentAnalysisID = this.analysisList[0];
-        this.showAnalysis(this.currentAnalysisID);
-      }
-      // Delete report
-      delete this.reports[id];
-    },
-    showAnalysis(id){
-      var currentAnalysisReport = this.reports[id];
-      this.$refs.Main.showAnalysis(currentAnalysisReport);
-    },
-    showCurrentAnalysis(){
-      if (this.currentAnalysisID != null)
-        this.showAnalysis(this.currentAnalysisID);
-    },
-    rename(id, newName){
-      var index = this.analysisIndexOf(id);
-      this.$set(this.analysisList[index], 'name', newName);
-      this.$set(this.reports[id], 'name', newName);
-    },
-    analysisIndexOf(id){
-      for (var i = 0; i < this.analysisList.length; i++)
-        if (this.analysisList[i].id == id){
-          return i;
-      }
-      return null;
-    }
   }
 }
-/*
-reports: {
-  <reportName>: {
-    name: <reportName>,
-    request: <request>,
-    description: <description>
-  }
-}
-*/
 </script>
 
 <style>

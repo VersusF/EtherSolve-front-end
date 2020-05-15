@@ -1,6 +1,6 @@
 <template>
   <li class="sidebar-item">
-    <span class="analysisName" @click="showAnalysis()">
+    <span class="analysisName" @click="showMyAnalysis()">
       <i class="list-icon">
         <font-awesome-icon icon="file-alt" />
       </i>
@@ -10,55 +10,67 @@
           class="renameLabel"
           type="text"
           @click="stopPropagation($event)"
-          @keyup.enter="renamed()"
+          @keyup.enter="$event.target.blur()"
           @blur="renamed()"
           @focus="$event.target.select()"
           v-model="newName"
         />
       </span>
-      <p v-else>{{name}}</p>
+      <p v-else>{{name(id)}}</p>
     </span>
     <i v-if="isBeingRenamed == false" class="analysisAction" v-on:click="rename()">
       <font-awesome-icon icon="edit" />
     </i>
-    <i class="analysisAction" v-on:click="closeAnalysis()">
+    <i class="analysisAction" v-on:click="closeMyAnalysis()">
       <font-awesome-icon icon="times" />
     </i>
   </li>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'; 
+
 export default {
   name: "AnalysisElement",
   props: {
-    name: String,
     id: Number
+  },
+  computed: {
+    ...mapGetters({
+      name: 'getAnalysisName'
+    })
   },
   data() {
     return {
       isBeingRenamed: false,
-      newName: this.name
+      newName: ''
     };
   },
   methods: {
-    showAnalysis() {
-      this.$parent.showAnalysis(this.id);
+    ...mapActions({
+      setCurrentAnalysis: 'setCurrentAnalysis',
+      closeAnalysis: 'closeAnalysis',
+      renameInStore: 'rename'
+    }),
+    showMyAnalysis() {
+      this.setCurrentAnalysis(this.id);
+    },
+    closeMyAnalysis(){
+      this.closeAnalysis(this.id);
     },
     rename() {
+      this.newName= this.name(this.id)
       this.isBeingRenamed = true;
       this.$nextTick( () =>
         this.$refs.inputText.focus()
       );
-    },
-    closeAnalysis() {
-      this.$parent.closeAnalysis(this.id);
     },
     stopPropagation(event) {
       event.stopPropagation();
     },
     renamed() {
       this.isBeingRenamed = false;
-      this.$parent.rename(this.id, this.newName);
+      this.renameInStore({id: this.id, newName: this.newName});
     }
   }
 };

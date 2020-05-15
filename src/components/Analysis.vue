@@ -8,10 +8,14 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
     name: 'Analysis',
-    props: {
-        currentAnalysisReport: Object 
+    computed: {
+        ...mapGetters({
+            currentAnalysisReport: 'getCurrentAnalysisReport'
+        })
     },
     data () {
         return {
