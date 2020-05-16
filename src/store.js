@@ -13,6 +13,7 @@ const store = new Vuex.Store({
         reports: {},
         // Current analysis id
         currentAnalysisID: null,
+        currentAnalysisName: null,
         // Progressive counter for ID
         analysisCount: 0
     },
@@ -30,6 +31,7 @@ const store = new Vuex.Store({
             state.currentAnalysisID = state.analysisCount;
             state.analysisCount++;
             var contractName = 'Contract_' + state.currentAnalysisID;
+            state.currentAnalysisName = contractName;
             state.analysisList.push(state.currentAnalysisID);
             state.reports[state.currentAnalysisID] = {
                 name: contractName,
@@ -46,20 +48,25 @@ const store = new Vuex.Store({
         },
         SET_CURRENT_ANALYSIS (state, id) {
             state.currentAnalysisID = id;
+            state.currentAnalysisName = state.reports[id].name;
         },
         CLOSE_ANALYSIS(state, id){
             var index = state.analysisList.indexOf(id);
             state.analysisList.splice(index, 1);
             if (state.analysisList.length == 0){
                 state.currentAnalysisID = null;
+                state.currentAnalysisName = null;
                 state.isAnalysisShown = false;
             } else if (state.currentAnalysisID == id) {
                 state.currentAnalysisID = state.analysisList[0];
+                state.currentAnalysisName = state.reports[state.currentAnalysisID].name;
             }
             delete state.reports[id];
         },
         RENAME(state, {id, newName}){
             Vue.set(state.reports[id], 'name', newName);
+            if (state.currentAnalysisID == id)
+                state.currentAnalysisName = newName;
         }
     },
     actions: {
