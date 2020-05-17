@@ -5,8 +5,11 @@
         <div class="gridLayout">
             <Cfg class="cfg"/>
             <Info class="info" :report="analysisExample"/>
-            <ErrorLog class="errorLog"/>
-            <SourceCode class="sourceCode"/>
+            <div class="collapsibles">
+                <ErrorLog class="errorLog" :log="analysisExample.runtimeCfg.buildReport.errorLog"/>
+                <SourceCode class="sourceCode" :sourceCode="analysisExample.binarySource" />
+            </div>
+            <RemainingData class="remainingData" :remainingData="analysisExample.runtimeCfg.remainingData"/>
         </div>
     </div>
 </template>
@@ -17,6 +20,7 @@ import report from '@/assets/example.js'
 import Cfg from './analysis_elements/Cfg.vue'
 import Info from './analysis_elements/Info.vue'
 import ErrorLog from './analysis_elements/ErrorLog.vue'
+import RemainingData from './analysis_elements/RemainingData.vue'
 import SourceCode from './analysis_elements/SourceCode.vue'
 
 export default {
@@ -25,6 +29,7 @@ export default {
         Cfg,
         Info,
         ErrorLog,
+        RemainingData,
         SourceCode
     },
     computed: {
@@ -37,7 +42,7 @@ export default {
     },
     data () {
         return {
-            analysisExample: report
+            analysisExample: null //report
             //content: 'Loading...'
         }
     },
@@ -48,6 +53,7 @@ export default {
         //         this.content = 'Error'; 
         //         console.log(error);
         //     });
+        setTimeout(() => this.analysisExample = report, 5000)
     }
 }
 </script>
@@ -69,7 +75,7 @@ export default {
     grid-template-rows: auto;
     grid-template-areas: 
                 "cfg cfg cfg inf"
-                "err err src src";
+                "clp clp rdt rdt";
 }
 .cfg {
     grid-area: cfg;
@@ -77,10 +83,10 @@ export default {
 .info {
     grid-area: inf;
 }
-.errorLog {
-    grid-area: err;
+.collapsibles {
+    grid-area: clp;
 }
-.sourceCode {
-    grid-area: src;
+.remainingData {
+    grid-area: rdt;
 }
 </style>

@@ -8,13 +8,17 @@ import { faTachometerAlt,
   faPlus, faFileImport, faAngleRight, 
   faTrash, faExclamationCircle, faBars, 
   faFileAlt, faTimes, faArrowLeft, faEdit,
-  faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+  faTimesCircle, faCheckCircle, faCodeBranch, 
+  faStopwatch, faHashtag, faCheckSquare, 
+  faMinus, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faTachometerAlt, faPlus, faFileImport, 
             faAngleRight, faTrash, faExclamationCircle, 
             faBars, faFileAlt, faTimes, faArrowLeft, 
-            faEdit, faTimesCircle, faCheckCircle)
+            faEdit, faTimesCircle, faCheckCircle,
+            faCodeBranch, faStopwatch, faHashtag,
+            faCheckSquare, faMinus, faCopy)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false

@@ -39,16 +39,18 @@ export default {
 .number {
     display: block;
     position: absolute;
-    top: 10%;
+    top: 0;
     right: 10%;
     font-size: 2em;
 }
 .message {
     display: block;
-    opacity: .5;
+    opacity: .7;
     position: absolute;
-    bottom: 10%;
+    bottom: 5px;
     right: 10%;
+    text-align: right;
+    max-width: 60%;
 }
 .error {
     background-color: #f44336;
