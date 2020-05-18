@@ -368,13 +368,13 @@ const report = {
         "334": []
       },
       "buildReport": {
-        "directJumpTargetErrors": 0,
+        "directJumpTargetErrors": 1,
         "orphanJumpTargetNullErrors": 0,
         "orphanJumpTargetUnknownErrors": 0,
         "loopDepthExceededErrors": 0,
-        "multipleRootNodesErrors": 0,
+        "multipleRootNodesErrors": 1,
         "stackExceededErrors": 0,
-        "criticalErrors": 0,
+        "criticalErrors": 1,
         "errorLog": "Errore\nCiao\nNew Line\n\n\n\tTab\n\nCiao\n\nEccomi",
         "buildTimeMillis": 53
       }

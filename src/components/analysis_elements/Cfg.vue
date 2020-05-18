@@ -13,6 +13,7 @@ export default {
 <style scoped>
 .content{
     width: 100%;
+    height: 80vh;
     background-color: chartreuse;
 }
 </style>
