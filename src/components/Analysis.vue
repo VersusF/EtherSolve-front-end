@@ -3,7 +3,7 @@
     <h1 v-bind:show="currentAnalysisName" class="contractName">{{ currentAnalysisReport.name }}</h1>
     <h2 v-if="isContentLoaded" class="contractAddress">{{analysisExample.address}}</h2>
     <div v-if="isContentLoaded" class="gridLayout">
-      <Cfg class="cfg" />
+      <Cfg class="cfg" :hash="analysisExample.binaryHash"/>
       <Info class="info" :report="analysisExample" />
       <div class="collapsibles">
         <ErrorLog class="errorLog" :log="analysisExample.runtimeCfg.buildReport.errorLog" />
@@ -64,7 +64,7 @@ export default {
     //     });
     setTimeout(() => {
       (this.analysisExample = report), (this.isContentLoaded = true);
-    }, 5000);
+    }, 1000);
   }
 };
 </script>
