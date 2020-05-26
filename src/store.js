@@ -36,7 +36,7 @@ const store = new Vuex.Store({
             state.reports[state.currentAnalysisID] = {
                 name: contractName,
                 request: request,
-                description: 'CaccaInBrodo'
+                etherSolveReport: null
             }
         },
         SHOW_ANALYSIS(state){

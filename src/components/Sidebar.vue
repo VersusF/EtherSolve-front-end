@@ -22,9 +22,15 @@
       </li>
       <li class="sidebar-item">
         <i class="list-icon">
-          <font-awesome-icon icon="file-import" />
+          <font-awesome-icon icon="file-upload" />
         </i>
         <p>Import</p>
+      </li>
+      <li class="sidebar-item">
+        <i class="list-icon">
+          <font-awesome-icon icon="file-download" />
+        </i>
+        <p>Export</p>
       </li>
       <hr />
 

@@ -1,17 +1,17 @@
 <template>
   <div class="content">
     <h1 v-bind:show="currentAnalysisName" class="contractName">{{ currentAnalysisReport.name }}</h1>
-    <h2 v-if="isContentLoaded" class="contractAddress">{{analysisExample.address}}</h2>
+    <h2 v-if="isContentLoaded" class="contractAddress">{{currentAnalysisReport.etherSolveReport.address}}</h2>
     <div v-if="isContentLoaded" class="gridLayout">
-      <Cfg class="cfg" :hash="analysisExample.binaryHash"/>
-      <Info class="info" :report="analysisExample" />
+      <Cfg class="cfg" :hash="currentAnalysisReport.etherSolveReport.binaryHash"/>
+      <Info class="info" :report="currentAnalysisReport.etherSolveReport" />
       <div class="collapsibles">
-        <ErrorLog class="errorLog" :log="analysisExample.runtimeCfg.buildReport.errorLog" />
-        <SourceCode class="sourceCode" :sourceCode="analysisExample.binarySource" />
+        <ErrorLog class="errorLog" :log="currentAnalysisReport.etherSolveReport.runtimeCfg.buildReport.errorLog" />
+        <SourceCode class="sourceCode" :sourceCode="currentAnalysisReport.etherSolveReport.binarySource" />
       </div>
       <RemainingData
         class="remainingData"
-        :remainingData="analysisExample.runtimeCfg.remainingData"
+        :remainingData="currentAnalysisReport.etherSolveReport.runtimeCfg.remainingData"
       />
     </div>
     <div v-else>
@@ -22,7 +22,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import report from "@/assets/example.js";
+// import report from "@/assets/example.js";
 import Cfg from "./analysis_elements/Cfg.vue";
 import Info from "./analysis_elements/Info.vue";
 import ErrorLog from "./analysis_elements/ErrorLog.vue";
@@ -46,25 +46,36 @@ export default {
     }),
     ...mapState({
       currentAnalysisName: "currentAnalysisName"
-    })
+    }),
   },
   data() {
     return {
-      analysisExample: null, //report
-      //content: 'Loading...'
       isContentLoaded: false
     };
   },
   mounted() {
-    // this.axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-    //     .then(response => this.content = response)
-    //     .catch(error => {
-    //         this.content = 'Error';
-    //         console.log(error);
-    //     });
-    setTimeout(() => {
-      (this.analysisExample = report), (this.isContentLoaded = true);
-    }, 1000);
+    if (this.currentAnalysisReport.etherSolveReport == null){
+      var params = this.currentAnalysisReport.request;
+      this.axios.post('/api/', params, {headers:{}})
+          .then(response => {
+            var status = response.data.status;
+            if (status == 1){
+              //this.currentAnalysisReport.etherSolveReport = response.data.result;
+              this.$set(this.currentAnalysisReport, "etherSolveReport", response.data.result);
+              this.isContentLoaded = true;
+            } else {
+              // Manage EtherSolve error
+              alert(response.data.message);
+            }
+              
+          })
+          .catch(error => {
+              this.content = 'Error';
+              console.log(error);
+          });
+    } else {
+      this.isContentLoaded = true;
+    }
   }
 };
 </script>

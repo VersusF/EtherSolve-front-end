@@ -31,11 +31,16 @@ export default {
       addAnalysis: 'addAnalysis'
     }),
     showAnalysisFromAddress(address) {
-      var request = address;
+      var request = {
+        "address": address
+      };
       this.addAnalysis(request);
     },
     showAnalysisFromBytecode(bytecode, bytecodeType) {
-      var request = bytecode + ": " + bytecodeType;
+      var request = {
+        "bytecode": bytecode,
+        "isOnlyRuntime": bytecodeType == "creation" ? false : true
+      };
       this.addAnalysis(request);
     },
     newAnalysis() {

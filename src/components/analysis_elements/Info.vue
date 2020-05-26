@@ -4,6 +4,9 @@
             <li v-if="buildReport.criticalErrors != 0">
                 <MessageCard type="error" :count="buildReport.criticalErrors" message="Critical errors" />
             </li>
+            <li v-if="buildReport.blockLimitErrors != 0">
+                <MessageCard type="error" :count="buildReport.criticalErrors" message="Block limit errors" />
+            </li>
             <li v-if="buildReport.orphanJumpTargetUnknownErrors != 0">
                 <MessageCard type="error" :count="buildReport.orphanJumpTargetUnknownErrors" message="Orphan jump target unknown errors" />
             </li>
