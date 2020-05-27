@@ -17,6 +17,7 @@
     "vue-axios": "^2.1.5",
     "vue-panzoom": "^1.1.1",
     "vue-svg-pan-zoom": "^1.1.0",
+    "vue2vis": "0.0.18",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
