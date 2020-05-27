@@ -1,8 +1,8 @@
 <template>
   <div class="content">
     <h1 v-bind:show="currentAnalysisName" class="contractName">{{ currentAnalysisReport.name }}</h1>
-    <h2 v-if="isContentLoaded" class="contractAddress">{{currentAnalysisReport.etherSolveReport.address}}</h2>
-    <div v-if="isContentLoaded" class="gridLayout">
+    <h2 v-if="contentStatus == 'loaded'" class="contractAddress">{{currentAnalysisReport.etherSolveReport.address}}</h2>
+    <div v-if="contentStatus == 'loaded'" class="gridLayout">
       <Cfg class="cfg" :cfg="currentAnalysisReport.etherSolveReport.runtimeCfg"/>
       <Info class="info" :report="currentAnalysisReport.etherSolveReport" />
       <div class="collapsibles">
@@ -14,7 +14,10 @@
         :remainingData="currentAnalysisReport.etherSolveReport.runtimeCfg.remainingData"
       />
     </div>
-    <div v-else>
+    <div v-else-if="contentStatus == 'error'"  class="component">
+      <ErrorMessage :message="currentAnalysisReport.errorMessage"/>
+    </div>
+    <div v-else class="component">
       <LoadingGif />
     </div>
   </div>
@@ -28,6 +31,7 @@ import Info from "./analysis_elements/Info.vue";
 import ErrorLog from "./analysis_elements/ErrorLog.vue";
 import RemainingData from "./analysis_elements/RemainingData.vue";
 import SourceCode from "./analysis_elements/SourceCode.vue";
+import ErrorMessage from "./analysis_elements/ErrorMessage.vue"
 import LoadingGif from "./LoadingGif.vue";
 
 export default {
@@ -38,6 +42,7 @@ export default {
     ErrorLog,
     RemainingData,
     SourceCode,
+    ErrorMessage,
     LoadingGif
   },
   computed: {
@@ -50,7 +55,7 @@ export default {
   },
   data() {
     return {
-      isContentLoaded: false
+      contentStatus: "loading"
     };
   },
   mounted() {
@@ -62,25 +67,32 @@ export default {
             if (status == 1){
               //this.currentAnalysisReport.etherSolveReport = response.data.result;
               this.$set(this.currentAnalysisReport, "etherSolveReport", response.data.result);
-              this.isContentLoaded = true;
+              this.contentStatus = "loaded";
             } else {
               // Manage EtherSolve error
-              alert(response.data.message);
+              this.$set(this.currentAnalysisReport, "errorMessage", response.data.message);
+              this.contentStatus = "error";
             }
               
           })
           .catch(error => {
-              this.content = 'Error';
-              console.log(error);
+              this.$set(this.currentAnalysisReport, "errorMessage", error);
+              this.contentStatus = "error";
           });
     } else {
-      this.isContentLoaded = true;
+      this.contentStatus = "loaded";
     }
   }
 };
 </script>
 
 <style scoped>
+.component {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .contractName {
   margin: 1rem;
   display: inline-block;
