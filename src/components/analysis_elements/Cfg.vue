@@ -13,7 +13,7 @@
         <rect id="svg_1" height="190" width="280" y="105" x="150" stroke-width="1.5" stroke="#000" fill="#A0D58A"/>
       </svg>
     </SvgPanZoom>-->
-    <network class="network" :nodes="{}" :edges="{}" :options="options" />
+    <network class="network" :nodes="[]" :edges="[]" :options="options" />
     <!-- <network class="network" :nodes="nodes" :edges="edges" :options="options" /> -->
   </div>
 </template>

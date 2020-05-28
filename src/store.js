@@ -93,6 +93,7 @@ const store = new Vuex.Store({
                 state.currentAnalysisName = newName;
         },
         SET_ETHERSOLVE_REPORT(state, {id, report}){
+            Vue.set(report, "name", state.currentAnalysisName);
             Vue.set(state.reports[id], "etherSolveReport", report);
             state.currentAnalysisStatus = 'loaded';
         },

@@ -26,11 +26,14 @@
         </i>
         <p>Import</p>
       </li>
-      <li class="sidebar-item">
+      <li class="sidebar-item" v-on:click="saveJson">
         <i class="list-icon">
           <font-awesome-icon icon="file-download" />
         </i>
         <p>Export</p>
+        <p class="tooltip" v-bind:class="{tooltipHidden: ! isTooltipShown, tooltipVisible: isTooltipShown}">
+          {{tooltipMessage}}
+        </p>
       </li>
       <hr />
 
@@ -45,7 +48,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import AnalysisElement from "./sidebar_elements/AnalysisElement.vue"
 
 export default {
@@ -53,10 +56,21 @@ export default {
   components: {
     AnalysisElement
   },
-  computed: mapState({
-    isExpanded: state => state.isSidebarExpanded,
-    analysisList: state => state.analysisList,
-  }),
+  data() {
+    return {
+      isTooltipShown: false,
+      tooltipMessage: 'Please choose a valid contract to download'
+    }
+  },
+  computed: {
+    ...mapState({
+      isExpanded: state => state.isSidebarExpanded,
+      analysisList: state => state.analysisList,
+    }),
+    ...mapGetters({
+      getCurrentAnalysisReport: 'getCurrentAnalysisReport'
+    })
+  },
   methods: {
     ...mapActions({
       toggleSidebar: 'toggleSidebar',
@@ -71,6 +85,27 @@ export default {
       this.showAnalysis();
       this.toggleSidebar();
     },
+    saveJson() {
+      if (this.getCurrentAnalysisReport != null){
+        if (this.getCurrentAnalysisReport.etherSolveReport != null){
+          var report = this.getCurrentAnalysisReport.etherSolveReport;
+          var reportString = JSON.stringify(report);
+          var blob = new Blob([reportString], {type: "application/json"});
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = report.name + ".json";
+          a.textContent = "Download contract";
+          document.body.appendChild(a);
+          a.style.display = 'none';
+          a.click();
+          document.body.removeChild(a);
+          return;
+        }
+      }
+      this.isTooltipShown = true;
+      setTimeout(() => this.isTooltipShown = false, 3500);
+    }
   }
 };
 </script>
@@ -86,7 +121,7 @@ export default {
   flex-direction: column;
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   transition: all var(--transition-speed) ease-in-out;
   -webkit-transition: all var(--transition-speed)  ease-in-out;
   -moz-transition: all var(--transition-speed)  ease-in-out;
@@ -113,14 +148,33 @@ export default {
   height: 2rem;
   align-items: center;
   text-decoration: none;
-  filter: grayscale(100%) opacity(0.7);
+  opacity: .7;
   transition: var(--transition-speed);
   cursor: pointer;
   padding-left: 0.5rem;
+  position: relative;
 }
 .sidebar-item:hover {
   filter: grayscale(0%) opacity(1);
-  background-color: var(--bg-accent-hover);
+  background: var(--bg-accent-hover);
+}
+.tooltip {
+  position: absolute;
+  top: -20px;
+  background: #f44336;
+  width: 9.5rem;
+  padding: .2em;
+  border-radius: 5px;
+  filter: none;
+  transition: var(--transition-speed);
+  left: calc(5px + var(--sidebar-width));
+  z-index: 9;
+}
+.tooltipVisible {
+  opacity: 1.3;
+}
+.tooltipHidden {
+  opacity: 0;
 }
 .logo {
   padding: 0.5em;
