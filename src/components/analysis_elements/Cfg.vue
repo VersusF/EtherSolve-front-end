@@ -13,7 +13,8 @@
         <rect id="svg_1" height="190" width="280" y="105" x="150" stroke-width="1.5" stroke="#000" fill="#A0D58A"/>
       </svg>
     </SvgPanZoom>-->
-    <network class="network" :nodes="nodes" :edges="edges" :options="options" />
+    <network class="network" :nodes="{}" :edges="{}" :options="options" />
+    <!-- <network class="network" :nodes="nodes" :edges="edges" :options="options" /> -->
   </div>
 </template>
 
@@ -48,11 +49,20 @@ export default {
         },
         layout: {
           hierarchical: {
-            enabled: true
+            enabled: true,
+            direction: 'UD',
+            sortMethod: 'directed'
           }
         },
         nodes: {
           shape: 'box'
+        },
+        edges: {
+          arrows: {
+            to: {
+              enabled: true
+            }
+          }
         }
       }
       //svgElement: null
@@ -64,11 +74,11 @@ export default {
         id: node.offset,
         label: 'Block ' + node.offset
       });
-      var edgeCounter = this.nodes.length + 10;
+      //var edgeCounter = this.nodes.length + 10;
       this.cfg.successors.forEach(edge => {
         edge.to.forEach(to => {
           this.edges.push({
-            id: edgeCounter++,
+            //id: edgeCounter++,
             from: edge.from,
             to: to
           });

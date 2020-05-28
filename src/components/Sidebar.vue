@@ -124,6 +124,7 @@ export default {
 }
 .logo {
   padding: 0.5em;
+  margin-top: 1em;
   align-self: center;
 }
 .logo-text {

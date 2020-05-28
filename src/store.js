@@ -14,6 +14,7 @@ const store = new Vuex.Store({
         // Current analysis id
         currentAnalysisID: null,
         currentAnalysisName: null,
+        currentAnalysisStatus: 'loading',
         // Progressive counter for ID
         analysisCount: 0
     },
@@ -21,7 +22,20 @@ const store = new Vuex.Store({
         getCurrentAnalysisReport(state) {
             return state.reports[state.currentAnalysisID];
         },
-        getAnalysisName: state => id => state.reports[id].name
+        getAnalysisName: state => id => state.reports[id].name,
+        // getCurrentAnalysisStatus: state => {
+        //     console.log("call");
+        //     if (state.currentAnalysisID == null || state.reports[state.currentAnalysisID] == null)
+        //         return null;
+        //     console.log(state.reports[state.currentAnalysisID].etherSolveReport);
+        //     if (state.reports[state.currentAnalysisID].etherSolveReport != null){             
+        //         return 'loaded';
+        //     }
+        //     if (state.reports[state.currentAnalysisID].errorMessage != null){               
+        //         return 'error';
+        //     }
+        //     return 'loading';
+        // }
     },
     mutations: {
         TOGGLE_SIDEBAR(state) {
@@ -36,7 +50,8 @@ const store = new Vuex.Store({
             state.reports[state.currentAnalysisID] = {
                 name: contractName,
                 request: request,
-                etherSolveReport: null
+                etherSolveReport: null,
+                errorMessage: null
             }
         },
         SHOW_ANALYSIS(state){
@@ -45,10 +60,19 @@ const store = new Vuex.Store({
         },
         HIDE_ANALYSIS(state){
             state.isAnalysisShown = false;
+            state.currentAnalysisStatus = 'loading'
         },
         SET_CURRENT_ANALYSIS (state, id) {
             state.currentAnalysisID = id;
             state.currentAnalysisName = state.reports[id].name;
+            // Update status
+            if (state.reports[id].etherSolveReport != null){             
+                state.currentAnalysisStatus = 'loaded';
+            } else if (state.reports[id].errorMessage != null){               
+                state.currentAnalysisStatus = 'error';
+            } else {
+                state.currentAnalysisStatus = 'loading';
+            }
         },
         CLOSE_ANALYSIS(state, id){
             var index = state.analysisList.indexOf(id);
@@ -67,6 +91,14 @@ const store = new Vuex.Store({
             Vue.set(state.reports[id], 'name', newName);
             if (state.currentAnalysisID == id)
                 state.currentAnalysisName = newName;
+        },
+        SET_ETHERSOLVE_REPORT(state, {id, report}){
+            Vue.set(state.reports[id], "etherSolveReport", report);
+            state.currentAnalysisStatus = 'loaded';
+        },
+        SET_ERROR(state, {id, error}){
+            Vue.set(state.reports[id], "errorMessage", error);
+            state.currentAnalysisStatus = 'error';
         }
     },
     actions: {
@@ -96,6 +128,12 @@ const store = new Vuex.Store({
         },
         rename(context, arg){
             context.commit('RENAME', arg);
+        },
+        setEtherSolveReport(context, arg){
+            context.commit('SET_ETHERSOLVE_REPORT', arg);
+        },
+        setError(context, arg){
+            context.commit('SET_ERROR', arg);
         }
     }
 });

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 // import report from "@/assets/example.js";
 import Cfg from "./analysis_elements/Cfg.vue";
 import Info from "./analysis_elements/Info.vue";
@@ -47,40 +47,41 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentAnalysisReport: "getCurrentAnalysisReport"
+      currentAnalysisReport: "getCurrentAnalysisReport",
     }),
     ...mapState({
-      currentAnalysisName: "currentAnalysisName"
+      currentAnalysisName: "currentAnalysisName",
+      currentAnalysisID: "currentAnalysisID",
+      contentStatus: "currentAnalysisStatus"
     }),
   },
-  data() {
-    return {
-      contentStatus: "loading"
-    };
+  methods: {
+    ...mapActions({
+      setEtherSolveReport: "setEtherSolveReport",
+      setError: "setError"
+    })
   },
   mounted() {
+    var id = this.currentAnalysisID;
     if (this.currentAnalysisReport.etherSolveReport == null){
       var params = this.currentAnalysisReport.request;
       this.axios.post('/api/', params, {headers:{}})
           .then(response => {
             var status = response.data.status;
             if (status == 1){
-              //this.currentAnalysisReport.etherSolveReport = response.data.result;
-              this.$set(this.currentAnalysisReport, "etherSolveReport", response.data.result);
-              this.contentStatus = "loaded";
+              // this.$set(this.currentAnalysisReport, "etherSolveReport", response.data.result);
+              this.setEtherSolveReport({id: this.currentAnalysisID, report: response.data.result});
             } else {
               // Manage EtherSolve error
-              this.$set(this.currentAnalysisReport, "errorMessage", response.data.message);
-              this.contentStatus = "error";
+              // this.$set(this.currentAnalysisReport, "errorMessage", response.data.message);
+              this.setError({id: id, error: response.data.message});
             }
               
           })
           .catch(error => {
-              this.$set(this.currentAnalysisReport, "errorMessage", error);
-              this.contentStatus = "error";
+              // this.$set(this.currentAnalysisReport, "errorMessage", error);
+              this.setError({id: id, error: error});
           });
-    } else {
-      this.contentStatus = "loaded";
     }
   }
 };
