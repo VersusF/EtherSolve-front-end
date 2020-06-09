@@ -31,9 +31,10 @@
           <font-awesome-icon icon="file-download" />
         </i>
         <p>Export</p>
-        <p class="tooltip" v-bind:class="{tooltipHidden: ! isTooltipShown, tooltipVisible: isTooltipShown}">
-          {{tooltipMessage}}
-        </p>
+        
+        <div class="tooltip" v-bind:class="{tooltipHidden: ! isTooltipShown, tooltipVisible: isTooltipShown}">
+          <p>{{tooltipMessage}}</p>
+        </div>
       </li>
       <hr />
 
@@ -143,12 +144,12 @@ export default {
   height: 100%;
 }
 .sidebar-item {
+  color: #f0f0f0cc;
   width: auto;
   display: flex;
   height: 2rem;
   align-items: center;
   text-decoration: none;
-  opacity: .7;
   transition: var(--transition-speed);
   cursor: pointer;
   padding-left: 0.5rem;
@@ -160,18 +161,34 @@ export default {
 }
 .tooltip {
   position: absolute;
-  top: -20px;
+  top: -7px;
   background: #f44336;
+  color: #f0f0f0;
   width: 9.5rem;
-  padding: .2em;
   border-radius: 5px;
-  filter: none;
   transition: var(--transition-speed);
   left: calc(5px + var(--sidebar-width));
-  z-index: 9;
+  z-index: 0;
+}
+.tooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  /* border-right: 20px solid blue; */
+  border-right: 20px solid #f44336;
+  border-bottom: 10px solid transparent;
+  position: absolute;
+  z-index: -3;
+  top: 12px;
+  left: -15px;
+}
+.tooltip p {
+  margin: .2em;
+  z-index: 0;
 }
 .tooltipVisible {
-  opacity: 1.3;
+  opacity: 1;
 }
 .tooltipHidden {
   opacity: 0;
