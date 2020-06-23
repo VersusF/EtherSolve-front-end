@@ -11,10 +11,11 @@ const store = new Vuex.Store({
         analysisList: [],
         // Maps every id to a report object
         reports: {},
-        // Current analysis id
+        // Current analysis info
         currentAnalysisID: null,
         currentAnalysisName: null,
-        currentAnalysisStatus: 'loading',
+        currentAnalysisStatus: 'loading', // It can be {'loading', 'loaded', 'error'}
+        currentCfgStatus: 'idle', // It can be {'idle', 'loading', 'loaded'}
         // Progressive counter for ID
         analysisCount: 0
     },
@@ -51,7 +52,8 @@ const store = new Vuex.Store({
                 name: contractName,
                 request: request,
                 etherSolveReport: null,
-                errorMessage: null
+                errorMessage: null,
+                svgContent: null
             }
         },
         SHOW_ANALYSIS(state){
@@ -60,7 +62,8 @@ const store = new Vuex.Store({
         },
         HIDE_ANALYSIS(state){
             state.isAnalysisShown = false;
-            state.currentAnalysisStatus = 'loading'
+            state.currentAnalysisStatus = 'loading';
+            state.currentCfgStatus = 'idle';
         },
         SET_CURRENT_ANALYSIS (state, id) {
             state.currentAnalysisID = id;
@@ -73,6 +76,7 @@ const store = new Vuex.Store({
             } else {
                 state.currentAnalysisStatus = 'loading';
             }
+            state.currentCfgStatus = 'idle';
         },
         CLOSE_ANALYSIS(state, id){
             var index = state.analysisList.indexOf(id);
@@ -96,10 +100,18 @@ const store = new Vuex.Store({
             Vue.set(report, "name", state.currentAnalysisName);
             Vue.set(state.reports[id], "etherSolveReport", report);
             state.currentAnalysisStatus = 'loaded';
+            state.currentCfgStatus = 'idle';
         },
         SET_ERROR(state, {id, error}){
             Vue.set(state.reports[id], "errorMessage", error);
             state.currentAnalysisStatus = 'error';
+            state.currentCfgStatus = 'idle';
+        },
+        SET_CFG_STATUS(state, newStatus){
+            state.currentCfgStatus = newStatus;
+        },
+        SET_CFG_SVG(state, {id, svg}){
+            Vue.set(state.reports[id], 'svgContent', svg);
         }
     },
     actions: {
@@ -135,6 +147,12 @@ const store = new Vuex.Store({
         },
         setError(context, arg){
             context.commit('SET_ERROR', arg);
+        },
+        setCfgStatus(context, newStatus){
+            context.commit('SET_CFG_STATUS', newStatus);
+        },
+        setCfgSvg(context, arg){
+            context.commit('SET_CFG_SVG', arg);
         }
     }
 });

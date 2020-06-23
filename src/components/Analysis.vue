@@ -3,7 +3,11 @@
     <h1 v-bind:show="currentAnalysisName" class="contractName">{{ currentAnalysisReport.name }}</h1>
     <h2 v-if="contentStatus == 'loaded'" class="contractAddress">{{currentAnalysisReport.etherSolveReport.address}}</h2>
     <div v-if="contentStatus == 'loaded'" class="gridLayout">
-      <Cfg class="cfg" :cfg="currentAnalysisReport.etherSolveReport.runtimeCfg"/>
+      <Cfg class="cfg" 
+        :dotNotation="currentAnalysisReport.etherSolveReport.dotNotation" 
+        :contractName="currentAnalysisReport.name"
+        :contractID="currentAnalysisID"
+      />
       <Info class="info" :report="currentAnalysisReport.etherSolveReport" />
       <div class="collapsibles">
         <ErrorLog class="errorLog" :log="currentAnalysisReport.etherSolveReport.runtimeCfg.buildReport.errorLog" />
